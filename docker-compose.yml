@@ -1,0 +1,22 @@
+
+services:
+  agent:
+    build: .
+    container_name: smart-spreadsheet-agent
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount workspace for persistent file storage
+      - ./workspace:/app/workspace
+      # Mount .env file for secrets
+      - ./.env:/app/.env:ro
+      # Optional: mount static files for development
+      - ./static:/app/static
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - PYTHONUNBUFFERED=1
+    stdin_open: true
+    tty: true

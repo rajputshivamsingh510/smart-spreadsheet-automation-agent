@@ -1,148 +1,212 @@
 Smart Spreadsheet Automation Agent
 
-An autonomous AI agent that understands natural-language instructions and performs real spreadsheet tasks using AI-powered tool calling.
+<p align="center">
+  <b>Turn natural-language instructions into real spreadsheet actions.</b><br>
+  Built with LangGraph, Groq, FastAPI, and a modern HTML/CSS/JavaScript frontend.
+</p>
+
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#demo">Demo</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#example-prompts">Examples</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/rajputshivamsingh510/smart-spreadsheet-automation-agent">
+    <img src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github" alt="GitHub">
+  </a>
+  <img src="https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/LangGraph-Agent-1C3C3C" alt="LangGraph">
+  <img src="https://img.shields.io/badge/Groq-LLM-F55036" alt="Groq">
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white" alt="FastAPI">
+</p>
 
 🚀 Overview
 
-Smart Spreadsheet Automation Agent turns simple instructions into real spreadsheet operations.
+Smart Spreadsheet Automation Agent is an autonomous AI agent that accepts a natural-language task, decides which tools are required, and executes the workflow for the user.
 
-For example:
+Instead of only generating a text response, the agent performs real operations such as:
 
-Create 20 sample employees and import them into Excel and Google Sheets.
+Generate custom CSV data
 
-Or:
+Create Excel .xlsx files
 
-Create a student CSV with 15 students including Student ID, Name, Grade, Email, and GPA. Import it into Excel.
+Create and populate Google Sheets
 
-The agent automatically decides which tools are required and executes them in the correct sequence.
+Export data to ODS
 
-User Instruction
-       ↓
-   AI Agent
-       ↓
- Tool Selection
-       ↓
-   Generate CSV
-       ↓
-   Import Excel
-       ↓
- Google Sheets / ODS
-       ↓
- Execution Result
+Chain multiple tools in one task
 
-The project uses LangGraph, LangChain, Groq, Python tools, FastAPI, and a browser-based HTML/CSS/JavaScript frontend.
+Example
+
+"Create a student CSV with 15 students including Student ID, Name, Grade, Email, and GPA. Import it into Excel and save it as ODS."
+
+The agent determines the required sequence automatically.
 
 ✨ Features
 
-🤖 Autonomous AI tool selection
 
-🧠 LangGraph agent workflow
 
-🎯 Groq LLM
+Feature
 
-📄 Custom CSV generation with user-defined columns
+Description
 
-📊 Excel .xlsx creation
+🤖
 
-☁️ Google Sheets integration
+Autonomous Agent
 
-📋 ODS spreadsheet generation
+Dynamically selects and chains tools
 
-🌐 HTML/CSS/JavaScript frontend
+🧠
 
-⚡ Real-time SSE execution updates
+LangGraph
 
-🧵 Conversation/thread memory
+Stateful multi-step agent workflow
 
-🔌 MCP tool server
+⚡
 
-📁 Session-based file management
+Groq
 
-🧪 Retry and error handling
+Fast LLM inference
 
-🧠 Agent Architecture
+📄
 
-The core principle is:
+Custom CSV
 
-The AI decides what to do. The tools actually do it.
+Generate datasets with user-defined columns
 
-Natural Language Request
-          ↓
-      LLM Agent
-          ↓
-    Tool Selection
-          ↓
-     Tool Execution
-          ↓
-      Tool Result
-          ↓
-   More actions required?
-       ↓        ↓
-      YES       NO
-       ↓         ↓
-     Tool     Final Report
+📊
 
-The tool sequence is not hardcoded. The agent dynamically chooses and chains tools based on the user's instruction.
+Excel
 
-🤖 AI Model
+Create .xlsx files with openpyxl
 
-The agent currently uses Groq for LLM inference.
+☁️
 
-User Request
-     ↓
-   Groq LLM
-     ↓
-Tool Selection
-     ↓
-Tool Execution
+Google Sheets
 
-🛠️ Spreadsheet Tools
+Create and populate spreadsheets
+
+📋
+
+ODS
+
+OpenDocument spreadsheet support
+
+🌐
+
+Web UI
+
+HTML + CSS + JavaScript frontend
+
+📡
+
+SSE
+
+Real-time execution updates
+
+🧵
+
+Memory
+
+Thread-based conversation context
+
+🔌
+
+MCP
+
+Expose spreadsheet tools to MCP clients
+
+🎬 Demo
+
+The browser interface provides an Agent Console where you can:
+
+Enter a natural-language instruction
+
+Start the agent
+
+Watch the tool pipeline execute in real time
+
+View success/failure states
+
+Download generated files
+
+Open generated Google Sheets
+
+Review the final execution report
+
+Main demo prompt:
+
+Create a student CSV with 15 students including Student ID,
+Name, Grade, Email, and GPA. Import it into Excel and also
+save it as an ODS spreadsheet.
+
+🧠 Architecture
+
+The AI decides. The tools execute.
+
+┌──────────────────────────┐
+│     HTML / CSS / JS      │
+│       Agent Console      │
+└────────────┬─────────────┘
+             │ SSE / HTTP
+             ▼
+┌──────────────────────────┐
+│      FastAPI Backend     │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│     LangGraph Agent      │
+│                          │
+│       Groq LLM           │
+└────────────┬─────────────┘
+             │ Tool Calling
+             ▼
+┌─────────────────────────────────────┐
+│              Tools                  │
+│                                     │
+│ CSV → Excel → Google Sheets → ODS   │
+└─────────────────────────────────────┘
+
+The tool sequence is not hardcoded. The agent decides which tools are needed based on the user's goal.
+
+🛠️ Tools
 
 Tool
 
-Function
+Purpose
 
 generate_employee_csv
 
-Generates CSV data with custom columns
+Generate CSV data with custom columns
 
 import_csv_to_excel
 
-Creates an Excel .xlsx file
+Create an Excel workbook
 
 import_csv_to_google_sheets
 
-Creates and populates a Google Sheet
+Create and populate Google Sheets
 
 import_csv_to_ods
 
-Creates an .ods spreadsheet
+Create an ODS spreadsheet
 
-Custom CSV Columns
+Custom Data
 
-The agent can generate data for different types of entities, not only employees.
-
-Examples:
+The agent can work with different entities, not only employees:
 
 Student ID, Name, Grade, Email, GPA
 Product ID, Name, Category, Price, Stock
 Employee ID, Name, Department, Email, Salary
 
-The requested columns are interpreted from the natural-language instruction.
-
-Excel
-
-openpyxl is used to create .xlsx files.
-
-Microsoft Excel automation can also be used on Windows.
-
-Google Sheets
-
-Uses the Google Sheets API to create and populate spreadsheets automatically.
-
 🌐 Frontend
 
-The project includes a custom browser-based Agent Console built with:
+The frontend is built entirely with:
 
 HTML5
 
@@ -150,113 +214,83 @@ CSS3
 
 Vanilla JavaScript
 
-The frontend allows users to:
+Server-Sent Events (SSE)
 
-Enter natural-language instructions
+It provides:
 
-Start agent runs
+Natural-language prompt input
 
-View the execution pipeline
+Live pipeline visualization
 
-Monitor tool calls
+Tool execution logs
 
-See success/failure states
+Step status
 
-View execution results
+Generated file links
 
-Download generated CSV, Excel, and ODS files
+Google Sheets links
 
-Open generated Google Sheets
-
-The frontend communicates with the FastAPI backend using Server-Sent Events (SSE) for real-time execution updates.
+Final execution summary
 
 Browser
    ↓
-HTML / CSS / JavaScript
+HTML / CSS / JS
    ↓
-FastAPI Backend
+FastAPI
    ↓
-LangGraph Agent
+LangGraph
    ↓
 Groq + Tools
 
-🏗️ Project Structure
+📁 Project Structure
 
 smart-spreadsheet-automation-agent/
 │
-├── agent.py              # LangGraph AI agent
-├── server.py             # FastAPI backend + SSE streaming
-├── mcp_server.py         # MCP tool server
-├── cleanup_workspace.py  # Workspace cleanup
+├── agent.py
+├── server.py
+├── mcp_server.py
+├── cleanup_workspace.py
 │
 ├── tools/
-│   ├── csv_tool.py       # CSV generation
-│   ├── excel_tool.py     # Excel automation
-│   ├── gsheets_tool.py   # Google Sheets integration
-│   └── ods_tool.py       # ODS generation
+│   ├── csv_tool.py
+│   ├── excel_tool.py
+│   ├── gsheets_tool.py
+│   └── ods_tool.py
 │
 ├── utils/
-│   └── file_manager.py   # Session-based file management
+│   └── file_manager.py
 │
 ├── static/
-│   ├── index.html        # Frontend UI
-│   ├── app.js            # Frontend logic / SSE client
-│   └── style.css         # Frontend styling
+│   ├── index.html
+│   ├── app.js
+│   └── style.css
 │
-├── workspace/            # Generated files
-├── tests/                # Automated tests
+├── workspace/
+├── tests/
 ├── requirements.txt
 ├── Dockerfile
 └── README.md
 
-⚙️ Tech Stack
+🧰 Tech Stack
 
-AI & Agent
+AI & Agent: Python · LangChain · LangGraph · Groq
 
-Python
+Backend: FastAPI · Server-Sent Events
 
-LangChain
+Frontend: HTML5 · CSS3 · Vanilla JavaScript
 
-LangGraph
+Spreadsheet: Faker · openpyxl · Google Sheets API · ODS
 
-Groq
+Integration: MCP
 
-Spreadsheet Automation
+⚙️ Installation
 
-Faker
-
-openpyxl
-
-Google Sheets API
-
-Microsoft Excel automation
-
-ODS
-
-Frontend
-
-HTML5
-
-CSS3
-
-JavaScript
-
-Server-Sent Events (SSE)
-
-Backend & Integration
-
-FastAPI
-
-MCP
-
-🔧 Installation
-
-Clone the repository:
+1. Clone
 
 git clone https://github.com/rajputshivamsingh510/smart-spreadsheet-automation-agent.git
 cd smart-spreadsheet-automation-agent
 
-Create a virtual environment:
+2. Virtual environment
 
 Windows
 
@@ -268,29 +302,29 @@ macOS / Linux
 python3 -m venv venv
 source venv/bin/activate
 
-Install dependencies:
+3. Dependencies
 
 pip install -r requirements.txt
 
-Create a .env file:
+4. Environment
 
-GROQ_API_KEY=your_groq_api_key_here
+Create .env:
 
-For Google Sheets, configure the required Google API credentials such as credentials.json.
+GROQ_API_KEY=your_groq_api_key
+
+For Google Sheets, configure the required Google API/OAuth credentials.
 
 ▶️ Run
 
-Start the FastAPI backend:
+Start the FastAPI server:
 
 uvicorn server:app --reload --port 8000
 
-Open the frontend:
+Open:
 
 http://localhost:8000
 
-CLI
-
-The agent can also be run directly:
+Or run the agent directly:
 
 python agent.py "Create 20 employees and import them into Excel and Google Sheets."
 
@@ -302,92 +336,72 @@ Create 20 sample employees and save them as CSV.
 
 Student
 
-Create a student CSV with 15 students including Student ID, Name, Grade, Email, and GPA. Import it into Excel.
+Create a student CSV with 15 students including Student ID,
+Name, Grade, Email, and GPA. Import it into Excel.
 
 Product
 
-Create a product inventory CSV with Product ID, Name, Category, Price, Stock. Import it into Google Sheets.
+Create a product inventory with Product ID, Name, Category,
+Price, and Stock. Import it into Google Sheets.
 
-Multi-step
+Multi-tool
 
-Create 20 employees, import the data into Excel, and also save the same data as an ODS spreadsheet.
+Create 20 employees, import the data into Excel,
+and also save the same data as an ODS spreadsheet.
 
-The agent determines the required tool sequence automatically.
+The user describes the goal, not the implementation. The agent determines the tool sequence.
 
 🧵 Memory
 
-The agent uses LangGraph memory/checkpointing to maintain context across turns.
+The agent uses LangGraph checkpointing to maintain context across turns.
 
-Example:
-
+Turn 1:
 Create the employee CSV and import it into Excel.
 
-Then:
-
+Turn 2:
 Now also put the same data into Google Sheets.
 
-When the same thread is used, the agent can continue using the previous conversation context.
+Using the same thread allows the agent to continue with the previous context.
 
-🔌 MCP Support
+🔌 MCP
 
-The spreadsheet tools are also available through a standalone MCP server.
+The spreadsheet tools can also be exposed through the MCP server:
 
 python mcp_server.py
 
-This allows compatible AI clients to access the spreadsheet tools independently of the main agent.
+This allows compatible AI clients to use the tools independently of the main web application.
 
 🧪 Testing
-
-Run:
 
 pytest tests/ -v
 
 🎯 Project Goal
 
-The goal of this project is to demonstrate how an AI agent can move beyond generating text and perform real-world actions through tools.
+The project demonstrates a core agentic AI concept:
 
-Instead of:
+Traditional:
+User → LLM → Text
 
-User → LLM → Text Response
-
-the system enables:
-
+This project:
 User
- ↓
+  ↓
 AI Agent
- ↓
+  ↓
 Tool Selection
- ↓
+  ↓
 Real-World Action
- ↓
+  ↓
 Result
 
-🎥 Demo
-
-The project demonstration shows:
-
-Natural-language task input through the web frontend.
-
-Autonomous tool selection.
-
-Real-time agent execution through SSE.
-
-CSV generation with custom columns.
-
-Excel / Google Sheets / ODS operations.
-
-Generated files and final execution results.
-
-Example Demo Task
-
-Create a student CSV with 15 students including Student ID,
-Name, Grade, Email, and GPA. Import it into Excel and also
-save it as an ODS spreadsheet.
+The same architecture can be extended to other real-world automation tasks.
 
 👤 Author
 
 Shivam Singh Rajput
 
-[GitHub](https://github.com/rajputshivamsingh510)
+<a href="https://github.com/rajputshivamsingh510">GitHub</a> ·
+<a href="https://github.com/rajputshivamsingh510/smart-spreadsheet-automation-agent">Repository</a>
 
-⭐ If you find the project useful, consider giving it a star.
+<p align="center">
+  ⭐ If you find this project useful, consider giving it a star.
+</p>

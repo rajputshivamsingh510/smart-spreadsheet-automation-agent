@@ -1,69 +1,71 @@
-# Smart Spreadsheet Automation Agent
+Smart Spreadsheet Automation Agent
 
-> An autonomous AI agent that understands natural-language instructions and performs real spreadsheet tasks using AI-powered tool calling.
+An autonomous AI agent that understands natural-language instructions and performs real spreadsheet tasks using AI-powered tool calling.
 
-## 🚀 Overview
+🚀 Overview
 
-**Smart Spreadsheet Automation Agent** turns simple instructions into real spreadsheet operations.
+Smart Spreadsheet Automation Agent turns simple instructions into real spreadsheet operations.
 
 For example:
 
-```text
 Create 20 sample employees and import them into Excel and Google Sheets.
-```
+
+Or:
+
+Create a student CSV with 15 students including Student ID, Name, Grade, Email, and GPA. Import it into Excel.
 
 The agent automatically decides which tools are required and executes them in the correct sequence.
 
-```text
 User Instruction
        ↓
    AI Agent
        ↓
  Tool Selection
        ↓
- ┌───────────────┐
- │ Generate CSV  │
- └───────┬───────┘
-         ↓
- ┌───────────────┐
- │ Import Excel  │
- └───────┬───────┘
-         ↓
- ┌──────────────────┐
- │ Google Sheets    │
- └───────┬──────────┘
-         ↓
-   Execution Result
-```
+   Generate CSV
+       ↓
+   Import Excel
+       ↓
+ Google Sheets / ODS
+       ↓
+ Execution Result
 
-The project is built around **LangGraph, LangChain, Python tools, and a browser-based HTML/CSS/JavaScript frontend**.
+The project uses LangGraph, LangChain, Groq, Python tools, FastAPI, and a browser-based HTML/CSS/JavaScript frontend.
 
----
+✨ Features
 
-## ✨ Features
+🤖 Autonomous AI tool selection
 
-* 🤖 Autonomous AI tool selection
-* 🧠 LangGraph agent workflow
-* 🔄 Gemini → Groq → Mistral fallback
-* 📄 CSV generation
-* 📊 Excel `.xlsx` creation
-* ☁️ Google Sheets integration
-* 📋 ODS spreadsheet generation
-* 🌐 HTML/CSS/JavaScript frontend
-* ⚡ Live agent execution updates
-* 🧵 Conversation/thread memory
-* 🔌 MCP tool server
-* 🧪 Automated tests
+🧠 LangGraph agent workflow
 
----
+🎯 Groq LLM
 
-## 🧠 Agent Architecture
+📄 Custom CSV generation with user-defined columns
 
-The agent follows a simple principle:
+📊 Excel .xlsx creation
 
-> **The AI decides what to do. The tools actually do it.**
+☁️ Google Sheets integration
 
-```text
+📋 ODS spreadsheet generation
+
+🌐 HTML/CSS/JavaScript frontend
+
+⚡ Real-time SSE execution updates
+
+🧵 Conversation/thread memory
+
+🔌 MCP tool server
+
+📁 Session-based file management
+
+🧪 Retry and error handling
+
+🧠 Agent Architecture
+
+The core principle is:
+
+The AI decides what to do. The tools actually do it.
+
 Natural Language Request
           ↓
       LLM Agent
@@ -79,269 +81,277 @@ Natural Language Request
       YES       NO
        ↓         ↓
      Tool     Final Report
-```
 
-The tool sequence is **not hardcoded**. The agent can dynamically choose and chain tools based on the user's instruction.
+The tool sequence is not hardcoded. The agent dynamically chooses and chains tools based on the user's instruction.
 
----
+🤖 AI Model
 
-## 🤖 AI Model Fallback
+The agent currently uses Groq for LLM inference.
 
-Multiple LLM providers are supported for reliability:
+User Request
+     ↓
+   Groq LLM
+     ↓
+Tool Selection
+     ↓
+Tool Execution
 
-```text
-Gemini
-  ↓ unavailable / quota exceeded
-Groq
-  ↓ unavailable
-Mistral
-```
+🛠️ Spreadsheet Tools
 
-This allows the agent to continue operating when a provider reaches its quota or becomes temporarily unavailable.
+Tool
 
----
+Function
 
-## 🛠️ Spreadsheet Tools
+generate_employee_csv
 
-| Tool                          | Function                             |
-| ----------------------------- | ------------------------------------ |
-| `generate_employee_csv`       | Generates sample employee data       |
-| `import_csv_to_excel`         | Creates an Excel `.xlsx` file        |
-| `import_csv_to_google_sheets` | Creates and populates a Google Sheet |
-| `import_csv_to_ods`           | Creates an `.ods` spreadsheet        |
+Generates CSV data with custom columns
 
-### Excel
+import_csv_to_excel
 
-The Excel tool supports:
+Creates an Excel .xlsx file
 
-* Microsoft Excel COM automation on Windows
-* `openpyxl` fallback when Excel is unavailable
+import_csv_to_google_sheets
 
-### Google Sheets
+Creates and populates a Google Sheet
 
-The Google Sheets tool uses the Google Sheets API to create and populate spreadsheets automatically.
+import_csv_to_ods
 
----
+Creates an .ods spreadsheet
 
-## 🌐 Frontend
+Custom CSV Columns
 
-The project includes a custom **browser-based Agent Console** built with:
+The agent can generate data for different types of entities, not only employees.
 
-* HTML
-* CSS
-* JavaScript
+Examples:
+
+Student ID, Name, Grade, Email, GPA
+Product ID, Name, Category, Price, Stock
+Employee ID, Name, Department, Email, Salary
+
+The requested columns are interpreted from the natural-language instruction.
+
+Excel
+
+openpyxl is used to create .xlsx files.
+
+Microsoft Excel automation can also be used on Windows.
+
+Google Sheets
+
+Uses the Google Sheets API to create and populate spreadsheets automatically.
+
+🌐 Frontend
+
+The project includes a custom browser-based Agent Console built with:
+
+HTML5
+
+CSS3
+
+Vanilla JavaScript
 
 The frontend allows users to:
 
-* Enter natural-language instructions
-* Start agent runs
-* View the execution pipeline
-* Monitor tool calls
-* See success/failure states
-* View execution results
-* Access generated files
-* Open generated Google Sheets
+Enter natural-language instructions
 
-The frontend communicates with the Python backend and displays the agent's progress in real time.
+Start agent runs
 
-```text
+View the execution pipeline
+
+Monitor tool calls
+
+See success/failure states
+
+View execution results
+
+Download generated CSV, Excel, and ODS files
+
+Open generated Google Sheets
+
+The frontend communicates with the FastAPI backend using Server-Sent Events (SSE) for real-time execution updates.
+
 Browser
    ↓
 HTML / CSS / JavaScript
    ↓
-Python Backend
+FastAPI Backend
    ↓
 LangGraph Agent
    ↓
-AI Model + Tools
-```
+Groq + Tools
 
----
+🏗️ Project Structure
 
-## 🏗️ Project Structure
-
-```text
 smart-spreadsheet-automation-agent/
 │
 ├── agent.py              # LangGraph AI agent
-├── server.py             # Backend server
+├── server.py             # FastAPI backend + SSE streaming
 ├── mcp_server.py         # MCP tool server
 ├── cleanup_workspace.py  # Workspace cleanup
 │
 ├── tools/
 │   ├── csv_tool.py       # CSV generation
 │   ├── excel_tool.py     # Excel automation
-│   ├── gsheets_tool.py   # Google Sheets
+│   ├── gsheets_tool.py   # Google Sheets integration
 │   └── ods_tool.py       # ODS generation
 │
+├── utils/
+│   └── file_manager.py   # Session-based file management
+│
 ├── static/
-│   ├── index.html        # Frontend
-│   ├── app.js            # Frontend logic
+│   ├── index.html        # Frontend UI
+│   ├── app.js            # Frontend logic / SSE client
 │   └── style.css         # Frontend styling
 │
+├── workspace/            # Generated files
 ├── tests/                # Automated tests
 ├── requirements.txt
 ├── Dockerfile
 └── README.md
-```
 
----
+⚙️ Tech Stack
 
-## ⚙️ Tech Stack
+AI & Agent
 
-### AI & Agent
+Python
 
-* Python
-* LangChain
-* LangGraph
-* Gemini
-* Groq
-* Mistral
+LangChain
 
-### Spreadsheet Automation
+LangGraph
 
-* pandas
-* Faker
-* openpyxl
-* Google Sheets API
-* Microsoft Excel COM
-* ODS
+Groq
 
-### Frontend
+Spreadsheet Automation
 
-* HTML5
-* CSS3
-* JavaScript
+Faker
 
-### Integration
+openpyxl
 
-* MCP
-* REST/API communication
+Google Sheets API
 
----
+Microsoft Excel automation
 
-## 🔧 Installation
+ODS
 
-```bash
+Frontend
+
+HTML5
+
+CSS3
+
+JavaScript
+
+Server-Sent Events (SSE)
+
+Backend & Integration
+
+FastAPI
+
+MCP
+
+🔧 Installation
+
+Clone the repository:
+
 git clone https://github.com/rajputshivamsingh510/smart-spreadsheet-automation-agent.git
-
 cd smart-spreadsheet-automation-agent
+
+Create a virtual environment:
+
+Windows
 
 python -m venv venv
 venv\Scripts\activate
 
+macOS / Linux
+
+python3 -m venv venv
+source venv/bin/activate
+
+Install dependencies:
+
 pip install -r requirements.txt
-```
 
-Create a `.env` file:
+Create a .env file:
 
-```env
-GEMINI_API_KEY=your_key
-GROQ_API_KEY=your_key
-MISTRAL_API_KEY=your_key
-```
+GROQ_API_KEY=your_groq_api_key_here
 
-Google Sheets functionality additionally requires Google API credentials.
+For Google Sheets, configure the required Google API credentials such as credentials.json.
 
----
+▶️ Run
 
-## ▶️ Run
+Start the FastAPI backend:
 
-### Start the backend
-
-```bash
 uvicorn server:app --reload --port 8000
-```
 
-Then open the frontend in your browser through the local server.
+Open the frontend:
 
-### Run the agent directly
+http://localhost:8000
 
-```bash
+CLI
+
+The agent can also be run directly:
+
 python agent.py "Create 20 employees and import them into Excel and Google Sheets."
-```
 
----
+💬 Example Prompts
 
-## 💬 Example Instructions
+Employee
 
-```text
 Create 20 sample employees and save them as CSV.
-```
 
-```text
-Generate 50 employees and import them into Excel.
-```
+Student
 
-```text
-Create employee data and put it into Excel and Google Sheets.
-```
+Create a student CSV with 15 students including Student ID, Name, Grade, Email, and GPA. Import it into Excel.
 
-```text
-Also save the same data as an ODS file.
-```
+Product
+
+Create a product inventory CSV with Product ID, Name, Category, Price, Stock. Import it into Google Sheets.
+
+Multi-step
+
+Create 20 employees, import the data into Excel, and also save the same data as an ODS spreadsheet.
 
 The agent determines the required tool sequence automatically.
 
----
+🧵 Memory
 
-## 🧵 Memory
-
-The agent uses LangGraph's memory/checkpointing to maintain context across turns.
+The agent uses LangGraph memory/checkpointing to maintain context across turns.
 
 Example:
 
-```text
 Create the employee CSV and import it into Excel.
-```
 
 Then:
 
-```text
 Now also put the same data into Google Sheets.
-```
 
-The agent can continue working with the previous conversation context when the same thread is used.
+When the same thread is used, the agent can continue using the previous conversation context.
 
----
-
-## 🔌 MCP Support
+🔌 MCP Support
 
 The spreadsheet tools are also available through a standalone MCP server.
 
-```bash
 python mcp_server.py
-```
 
-This allows compatible AI clients to use the spreadsheet automation tools independently of the main agent.
+This allows compatible AI clients to access the spreadsheet tools independently of the main agent.
 
----
-
-## 🧪 Testing
+🧪 Testing
 
 Run:
 
-```bash
 pytest tests/ -v
-```
 
-External services such as Google Sheets and Excel can be mocked during testing.
+🎯 Project Goal
 
----
-
-## 🎯 Project Goal
-
-The goal of this project is to demonstrate how an AI agent can move beyond generating text and **perform real-world actions through tools**.
+The goal of this project is to demonstrate how an AI agent can move beyond generating text and perform real-world actions through tools.
 
 Instead of:
 
-```text
 User → LLM → Text Response
-```
 
 the system enables:
 
-```text
 User
  ↓
 AI Agent
@@ -351,15 +361,32 @@ Tool Selection
 Real-World Action
  ↓
 Result
-```
 
-This architecture can be extended to many other forms of automation beyond spreadsheets.
+🎥 Demo
 
----
+The project demonstration shows:
 
-## 👤 Author
+Natural-language task input through the web frontend.
 
-**Shivam Singh Rajput**
+Autonomous tool selection.
+
+Real-time agent execution through SSE.
+
+CSV generation with custom columns.
+
+Excel / Google Sheets / ODS operations.
+
+Generated files and final execution results.
+
+Example Demo Task
+
+Create a student CSV with 15 students including Student ID,
+Name, Grade, Email, and GPA. Import it into Excel and also
+save it as an ODS spreadsheet.
+
+👤 Author
+
+Shivam Singh Rajput
 
 [GitHub](https://github.com/rajputshivamsingh510)
 

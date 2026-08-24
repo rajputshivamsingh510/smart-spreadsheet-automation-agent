@@ -250,7 +250,7 @@ Google Sheets functionality additionally requires Google API credentials.
 ### Start the backend
 
 ```bash
-python server.py
+uvicorn server:app --reload --port 8000
 ```
 
 Then open the frontend in your browser through the local server.

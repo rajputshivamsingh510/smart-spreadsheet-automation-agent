@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee-Data Pipeline — Agent Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="console">
+
+  <header class="console__header">
+    <div class="brand">
+      <span class="brand__dot" aria-hidden="true"></span>
+      <span class="brand__eyebrow">agentic pipeline / live console</span>
+    </div>
+    <h1 class="brand__title">Employee&#8209;Data Import Agent</h1>
+    <p class="brand__sub">Describe the task in plain English. The agent decides which stations to run and in what order — this console shows exactly what it does, as it does it.</p>
+  </header>
+
+  <section class="panel panel--input" aria-label="Run instruction">
+    <label class="field-label" for="prompt">instruction</label>
+    <textarea id="prompt" rows="2" spellcheck="false">Create a sample employee CSV and import it into Excel and Google Sheets.</textarea>
+
+    <div class="input-row">
+      <div class="thread-field">
+        <label class="field-label" for="thread">thread</label>
+        <input id="thread" type="text" value="web-session" spellcheck="false">
+      </div>
+      <button id="runBtn" class="run-btn">
+        <span class="run-btn__label">Run agent</span>
+        <span class="run-btn__spinner" aria-hidden="true"></span>
+      </button>
+    </div>
+  </section>
+
+  <section class="panel panel--track" aria-label="Pipeline status">
+    <div class="panel__head">
+      <span class="field-label">pipeline</span>
+      <span class="panel__hint" id="trackHint">waiting for instruction</span>
+    </div>
+    <div id="track" class="track">
+      <div class="track__rail" aria-hidden="true"></div>
+      <div id="trackEmpty" class="track__empty">Stations appear here the moment the agent decides to use them — nothing is pre-scripted.</div>
+    </div>
+  </section>
+
+  <section class="panel panel--log" aria-label="Agent reasoning and tool log">
+    <div class="panel__head">
+      <span class="field-label">reasoning &amp; tool log</span>
+      <span class="panel__hint" id="logHint">idle</span>
+    </div>
+    <div id="log" class="log"></div>
+  </section>
+
+  <section id="reportSection" class="panel panel--report is-hidden" aria-label="Run report">
+    <div class="panel__head">
+      <span class="field-label">final report</span>
+    </div>
+    <table class="report-table">
+      <thead>
+        <tr><th>step</th><th>tool</th><th>status</th><th>details</th></tr>
+      </thead>
+      <tbody id="reportBody"></tbody>
+    </table>
+    <p id="reportSummary" class="report-summary"></p>
+    <div id="downloads" class="downloads"></div>
+  </section>
+
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

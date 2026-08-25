@@ -11,9 +11,10 @@ An autonomous LLM agent for CSV, Excel, Google Sheets, and ODS workflows — bui
 [![Groq](https://img.shields.io/badge/Groq-LLM-F55036?style=for-the-badge)](https://groq.com/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-Frontend-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-[Demo](#-demo) · [Features](#-features) · [Architecture](#-architecture) · [Quick Start](#-quick-start) · [Example Prompts](#-example-prompts) · [MCP](#-mcp-support)
+[Demo](#-demo) · [Features](#-features) · [Architecture](#-architecture) · [Quick Start](#-quick-start) · [Docker](#-docker) · [Example Prompts](#-example-prompts) · [MCP](#-mcp-support)
 
 </div>
 
@@ -94,6 +95,7 @@ Price, and Stock. Import it into Google Sheets.
 | 🧠 **LangGraph workflow** — stateful, multi-step execution with memory across turns | ☁️ **Google Sheets** — creates and populates sheets through the Sheets API |
 | ⚡ **Groq inference** — fast tool-planning and generation | 📋 **ODS export** — OpenDocument Spreadsheet output |
 | 📄 **Custom CSV generation** — any column schema, described in natural language | 🌐 **Live console** — watch the plan execute step by step over SSE |
+| 🐳 **Docker-ready** — runs as a non-root user via `docker-compose` | |
 
 ---
 
@@ -196,6 +198,50 @@ Open **[http://localhost:8000](http://localhost:8000)**.
 
 ---
 
+## 🐳 Docker
+
+The container runs as a non-root user (`appuser`) and starts the same `server:app` used for local development.
+
+### Build and run
+
+```bash
+docker-compose up --build
+```
+
+Open [http://localhost:8000](http://localhost:8000).
+
+### Configuration
+
+Create a `.env` file in the project root before running:
+
+```env
+GROQ_API_KEY=your_groq_api_key
+# Reserved for future provider support (not yet read by agent.py):
+GEMINI_API_KEY=
+MISTRAL_API_KEY=
+```
+
+`docker-compose.yml` mounts:
+
+- `./workspace` → `/app/workspace` — generated CSV/Excel/ODS files persist on the host across container restarts
+- `./.env` → `/app/.env` (read-only) — API keys
+- `./static` → `/app/static` — lets you edit the frontend without rebuilding
+
+**Google Sheets credentials:** `credentials.json` and `token.json` aren't mounted as volumes, so they need to be present in the build context when you run `docker-compose up --build` (the Dockerfile's `COPY . .` will include them). Double-check `.dockerignore` doesn't exclude them — if it does, add explicit volume mounts for both files instead.
+
+### Notes
+
+- `docker-entrypoint.sh` is included in the repo but isn't currently wired into the `Dockerfile` (no `ENTRYPOINT` line references it) — it's a utility script available for future use, not part of the active startup path today.
+- Inside the container, the Excel tool automatically uses the `openpyxl` fallback rather than launching a real Excel application, since COM automation requires Windows.
+
+### Stop
+
+```bash
+docker-compose down
+```
+
+---
+
 ## 💬 Example Prompts
 
 **Employee data**
@@ -255,6 +301,7 @@ smart-spreadsheet-automation-agent/
 ├── server.py                # FastAPI app + SSE streaming
 ├── mcp_server.py             # MCP server exposing the tools
 ├── cleanup_workspace.py      # Workspace/file cleanup
+├── docker-entrypoint.sh      # Utility script (not yet wired into Dockerfile)
 │
 ├── tools/
 │   ├── csv_tool.py
@@ -274,6 +321,7 @@ smart-spreadsheet-automation-agent/
 ├── tests/
 ├── requirements.txt
 ├── Dockerfile
+├── docker-compose.yml
 └── README.md
 ```
 
@@ -291,6 +339,7 @@ smart-spreadsheet-automation-agent/
 | Spreadsheets | CSV · openpyxl · ODS |
 | Cloud | Google Sheets API |
 | Integration | MCP |
+| Deployment | Docker · docker-compose |
 | Testing | pytest |
 
 ---
